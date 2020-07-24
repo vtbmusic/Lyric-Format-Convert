@@ -72,7 +72,7 @@ def ass2vrc(ass_txt):
     vrc_obj = {
         'karaoke': False,
         'scrollDisabled': False,
-        'translated': False,
+        'translated': True,
         'origin': {
             'version': 2,
             'text': ''
@@ -89,7 +89,7 @@ def ass2vrc(ass_txt):
     end_id = -1
     text_id = -1
 
-    for line in lines:
+    for idx, line in enumerate(lines):
         if line == '[Events]':
             targeted = 1
             continue
@@ -124,6 +124,8 @@ def ass2vrc(ass_txt):
             end = items[end_id]  # not used for now
             text = items[text_id]
             text = text.split('\\N')
+            if len(text) < 2:
+                raise ConvertError('Fail to find translation in line {:d}'.format(idx))
             ori_txt, trans_txt = text[0], text[1]
             vrc_obj['origin']['text'] += '[{}]{}'.format(start, ori_txt)
             vrc_obj['translate']['text'] += '[{}]{}'.format(start, trans_txt)
