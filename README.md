@@ -13,7 +13,7 @@ Currently supporting language:
 ### Python Script for Manual Convertion
 `convert.py`, Usage:
 
-```shell
+```
 usage: convert.py [-h] [-r] -f {txt,mlrc,ass} [--indent INDENT] path
 
 VtuberMusic Lyric-Format-Converter
