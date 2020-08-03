@@ -7,7 +7,6 @@ parser = argparse.ArgumentParser(description='VtuberMusic Lyric-Format-Converter
 parser.add_argument(
     'path',
     type=str,
-    required=True,
     help='Path to the file. A new .vrc file will be created. Add -r if you want to convert all files under a directory.'
 )
 parser.add_argument(
