@@ -41,8 +41,17 @@ def convert_dir(args):
             if os.path.splitext(name)[1] == suffix:
                 lyric_files.append(os.path.join(root, name))
     
+    success = 0
+    failed = 0
     for lyric_file in lyric_files:
-        convert_file(args, lyric_file)
+        flag = convert_file(args, lyric_file)
+        if flag:
+            success += 1
+        else:
+            failed += 1
+    
+    print('{:d} file(s) were detected.\n{:d} file(s) were converted successfully.\n{:d} file(s) failed to be converted.'
+        .format(len(lyric_files), success, failed))
 
 
 def convert_file(args, file_path):
@@ -58,16 +67,22 @@ def convert_file(args, file_path):
     
     if not decoded:
         print('Unrecognized encoding in file: {}. Skip this file.'.format(file_path))
-        return
+        return False
     
-    if args.f == 'txt' or args.f == 'mlrc':
-        vrc_obj = utils.mlrc2vrc(ori_txt)
-    elif args.f == 'ass':
-        vrc_obj = utils.ass2vrc(ori_txt)
+    try:
+        if args.f == 'txt' or args.f == 'mlrc':
+            vrc_obj = utils.mlrc2vrc(ori_txt)
+        elif args.f == 'ass':
+            vrc_obj = utils.ass2vrc(ori_txt)
+    except utils.ConvertError as err:
+        print('In file {}: {}'.format(file_path, err))
+        return False
     
     new_file = os.path.splitext(file_path)[0] + '.vrc'
     with open(new_file, 'w', encoding='utf-8') as f:
         json.dump(vrc_obj, f, ensure_ascii=False, indent=args.indent)
+    
+    return True
 
 
 if __name__ == '__main__':
