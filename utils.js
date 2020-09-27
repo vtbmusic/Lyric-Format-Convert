@@ -96,6 +96,7 @@ function ass2vrc (assTxt) {
   var textId = -1;
   for (var i in lines) {
     let line = lines[i];
+    // line = line.match(/^\s*([^]*?)\s*$/)[1]; // the match is used for "strip"
     if (line === '[Events]') {
       targeted = 1;
       continue;
@@ -106,7 +107,7 @@ function ass2vrc (assTxt) {
     if (line.length === 0) continue; // empty line
 
     let pos = line.search(':');
-    let items = pos.slice(pos + 1).split(',');
+    let items = line.slice(pos + 1).split(',');
     if (targeted === 1) {
       // find position for start, end, text.
       for (var j in items) {
@@ -114,13 +115,11 @@ function ass2vrc (assTxt) {
         if (attr === 'Start') startId = j;
         else if (attr === 'End') endId = j;
         else if (attr === 'Text') textId = j;
-
-        if (startId === -1) throw 'Fail to find "Start" attribute in [Events]';
-        if (endId === -1) throw 'Fail to find "End" attribute in [Events]';
-        if (textId === -1) throw 'Fail to find "Text" attribute in [Events]';
-
-        targeted = 2;
       }
+      if (startId === -1) throw 'Fail to find "Start" attribute in [Events]';
+      if (endId === -1) throw 'Fail to find "End" attribute in [Events]';
+      if (textId === -1) throw 'Fail to find "Text" attribute in [Events]';
+      targeted = 2;
     } else if (targeted === 2) {
       let start = items[startId];
       let end = items[endId]; // not used for now
