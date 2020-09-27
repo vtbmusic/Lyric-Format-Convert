@@ -23,7 +23,7 @@ function mlrc2vrc (txt) {
     var stripped = item.match(/^\s*([^]*?)\s*$/)[1]; // the match is used for "strip"
     var matchObj = stripped.match(/(\[.*?\])\s*([^\[\]]*)/);
     var timeStamp = matchObj[1];
-    var splited = matchObj[2] ? matchObj[2].split('\n') : ['']; // special for js: need to handle "undefined"
+    var splited = matchObj[2].split('\n');
     if (splited.length > 1) {
       vrcObj.translated = true;
     }
