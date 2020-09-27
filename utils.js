@@ -126,8 +126,8 @@ function ass2vrc (assTxt) {
       let text = items[textId];
       text = text.split('\\N');
       if (text.length < 2) throw 'Fail to find translation in line ' + i;
-      oriText = text[0];
-      transText = text[1];
+      let oriText = text[0];
+      let transText = text[1];
       vrcObj.origin.text += '[' + start + ']' + oriText + '\n';
       vrcObj.translate.text += '[' + start + ']' + transText + '\n';
     }
