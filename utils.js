@@ -20,15 +20,18 @@ function mlrc2vrc (txt) {
 
   let pattern = /\[.*?\]\s*[^\[\]]*/g;
   txt.match(pattern).forEach(item => {
-    var splited = item.match(/^\s*([^]*?)\s*$/)[1].split('\n'); // the match is used for "strip"
-    if (splited.length > 2) {
+    var stripped = item.match(/^\s*([^]*?)\s*$/)[1]; // the match is used for "strip"
+    var matchObj = stripped.match(/(\[.*?\])\s*([^\[\]]*)/);
+    var timeStamp = matchObj[1];
+    var splited = matchObj[2] ? matchObj[2].split('\n') : ['']; // special for js: need to handle "undefined"
+    if (splited.length > 1) {
       vrcObj.translated = true;
     }
-    vrcObj.origin.text += splited[0] + splited[1] + '\n';
-    vrcObj.translate.text += splited[0] + (splited.length > 2 ? splited[2] : '') + '\n';
+    vrcObj.origin.text += timeStamp + splited[0] + '\n';
+    vrcObj.translate.text += timeStamp + (splited.length > 1 ? splited[1] : '') + '\n';
   });
 
-  return vrcObj
+  return vrcObj;
 }
 
 
